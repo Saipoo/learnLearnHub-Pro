@@ -5,6 +5,7 @@ from database import connect_to_mongo, close_mongo_connection, get_database
 from models import *
 from auth import hash_password, verify_password, create_access_token
 from dependencies import get_current_user, get_current_user_profile
+from config import settings
 from bson import ObjectId
 from datetime import datetime
 from typing import List, Optional
@@ -21,13 +22,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS configuration
+# CORS configuration - allow frontend URL from environment
+allowed_origins = [
+    "http://localhost:3000",
+    settings.frontend_url
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://learnhub-pro-academy.vercel.app"
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
