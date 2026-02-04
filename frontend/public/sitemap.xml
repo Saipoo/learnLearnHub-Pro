@@ -6,7 +6,7 @@
     
     <!-- Home Page -->
     <url>
-        <loc>https://araja.vercel.app/</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
@@ -14,7 +14,7 @@
     
     <!-- Login Page -->
     <url>
-        <loc>https://araja.vercel.app/login</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/login</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -22,7 +22,7 @@
     
     <!-- Register Page -->
     <url>
-        <loc>https://araja.vercel.app/register</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/register</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
@@ -30,7 +30,7 @@
     
     <!-- Courses Page -->
     <url>
-        <loc>https://araja.vercel.app/courses</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/courses</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
@@ -38,7 +38,7 @@
     
     <!-- Dashboard Page -->
     <url>
-        <loc>https://araja.vercel.app/dashboard</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/dashboard</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
@@ -46,7 +46,7 @@
     
     <!-- Profile Page -->
     <url>
-        <loc>https://araja.vercel.app/profile</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/profile</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
@@ -54,7 +54,7 @@
     
     <!-- Quizzes Page -->
     <url>
-        <loc>https://araja.vercel.app/quizzes</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/quizzes</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
@@ -62,7 +62,7 @@
     
     <!-- Complete Profile Page -->
     <url>
-        <loc>https://araja.vercel.app/complete-profile</loc>
+        <loc>https://learnhub-pro-academy.vercel.app/complete-profile</loc>
         <lastmod>2026-02-04</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>

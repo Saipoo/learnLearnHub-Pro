@@ -7,4 +7,4 @@ Disallow: /complete-profile
 Disallow: /quizzes
 
 # Sitemap
-Sitemap: https://araja.vercel.app/sitemap.xml
+Sitemap: https://learnhub-pro-academy.vercel.app/sitemap.xml
