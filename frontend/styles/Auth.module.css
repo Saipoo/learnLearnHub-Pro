@@ -1,0 +1,274 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 480px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 48px;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.authHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--light);
+  color: var(--gray);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.backButton:hover {
+  background: var(--border);
+  color: var(--dark);
+}
+
+.logoLink {
+  text-decoration: none;
+}
+
+.logoText {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.formHeader h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.formHeader p {
+  font-size: 16px;
+  color: var(--gray);
+}
+
+.form {
+  margin-bottom: 24px;
+}
+
+.passwordInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInputWrapper input {
+  padding-right: 48px;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gray);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transition: var(--transition);
+  font-size: 20px;
+}
+
+.passwordToggle:hover {
+  color: var(--primary);
+}
+
+.formFooter {
+  text-align: center;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.formFooter p {
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.link {
+  color: var(--primary);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* Profile Form Styles */
+.profileContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--light);
+}
+
+.profileWrapper {
+  width: 100%;
+  max-width: 600px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 16px var(--shadow);
+  padding: 40px;
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 24px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--light);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.uploadArea:hover {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.fileInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.uploadIcon {
+  width: 64px;
+  height: 64px;
+  background: var(--primary);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadText {
+  font-weight: 600;
+  color: var(--dark);
+  margin: 0;
+}
+
+.uploadHint {
+  font-size: 14px;
+  color: var(--gray);
+  margin: 0;
+}
+
+.imagePreviewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.imagePreview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary);
+}
+
+.changeImageBtn {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: var(--white);
+  border-radius: 8px;
+  font-weight: 500;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.changeImageBtn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .formWrapper,
+  .profileWrapper {
+    padding: 32px 24px;
+  }
+
+  .formHeader h1 {
+    font-size: 28px;
+  }
+
+  .formHeader p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .formWrapper,
+  .profileWrapper {
+    padding: 24px 16px;
+  }
+
+  .formHeader h1 {
+    font-size: 24px;
+  }
+}

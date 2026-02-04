@@ -1,0 +1,271 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--light);
+}
+
+/* Desktop Sidebar */
+.sidebar {
+  width: 280px;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.sidebarHeader {
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logoLink {
+  text-decoration: none;
+  display: block;
+  transition: var(--transition);
+}
+
+.logoLink:hover .logo {
+  transform: scale(1.05);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.nav {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: var(--radius);
+  color: var(--gray);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.navItem:hover {
+  background: var(--light);
+  color: var(--primary);
+}
+
+.navItemActive {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+.sidebarFooter {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: var(--radius);
+  background: var(--light);
+}
+
+.avatar {
+  flex-shrink: 0;
+}
+
+.userName {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--dark);
+}
+
+.userEmail {
+  font-size: 12px;
+  color: var(--gray);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--danger);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Main Content */
+.main {
+  flex: 1;
+  margin-left: 280px;
+  padding: 32px;
+  padding-bottom: 100px;
+  min-height: 100vh;
+}
+
+/* Mobile Header */
+.mobileHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.mobileLogoLink {
+  text-decoration: none;
+}
+
+.mobileLogo {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  cursor: pointer;
+}
+
+.menuBtn {
+  padding: 8px;
+  color: var(--dark);
+}
+
+/* Mobile Menu */
+.mobileMenu {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--white);
+  z-index: 99;
+  overflow-y: auto;
+}
+
+.mobileNav {
+  padding: 16px;
+}
+
+.mobileNavItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 8px;
+  border-radius: var(--radius);
+  color: var(--gray);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.mobileNavItemActive {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+.mobileLogoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  margin-top: 16px;
+  border-radius: var(--radius);
+  color: var(--danger);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* Bottom Navigation */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px;
+  z-index: 100;
+}
+
+.bottomNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  color: var(--gray);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.bottomNavItemActive {
+  color: var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding: 16px;
+    padding-top: 76px;
+    padding-bottom: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 12px;
+    padding-top: 72px;
+    padding-bottom: 90px;
+  }
+
+  .bottomNavItem {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+}
