@@ -6,11 +6,12 @@ from fastapi import HTTPException, status
 from typing import Optional
 import hashlib
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__truncate_error=True)
 
 def _pre_hash_password(password: str) -> str:
     """Pre-hash password with SHA256 to handle bcrypt's 72-byte limit"""
-    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    # SHA256 produces 64 hex characters (32 bytes), well under 72 byte limit
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()[:72]
 
 def hash_password(password: str) -> str:
     """Hash a password using SHA256 + bcrypt"""
