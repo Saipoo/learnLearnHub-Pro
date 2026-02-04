@@ -440,7 +440,7 @@ async def get_quiz(quiz_id: str, db = Depends(get_database)):
         "questions": quiz_questions
     }
 
-@app.post("/api/quizzes/{quiz_id}/attempt", response_model=QuizResultResponse)
+@app.post("/api/quizzes/{quiz_id}/attempt")
 async def attempt_quiz(
     quiz_id: str,
     attempt: QuizAttempt,
@@ -448,103 +448,109 @@ async def attempt_quiz(
     db = Depends(get_database)
 ):
     """Submit quiz attempt and get results"""
-    if not ObjectId.is_valid(quiz_id):
+    try:
+        if not ObjectId.is_valid(quiz_id):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid quiz ID"
+            )
+        
+        quiz = await db.quizzes.find_one({"_id": ObjectId(quiz_id)})
+        if not quiz:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Quiz not found"
+            )
+        
+        # Get questions with correct answers
+        questions = await db.quiz_questions.find({"quiz_id": quiz_id}).to_list(length=100)
+        
+        if len(attempt.answers) != len(questions):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Number of answers doesn't match number of questions"
+            )
+        
+        # Calculate score
+        correct_answers = 0
+        for i, question in enumerate(questions):
+            user_answer_index = attempt.answers[i]
+            if 0 <= user_answer_index < len(question["options"]):
+                if question["options"][user_answer_index]["is_correct"]:
+                    correct_answers += 1
+        
+        total_questions = len(questions)
+        score = (correct_answers / total_questions) * 100
+        passed = score >= quiz["passing_score"]
+        
+        # Save result
+        result_data = {
+            "user_id": str(current_user["_id"]),
+            "quiz_id": quiz_id,
+            "score": score,
+            "total_questions": total_questions,
+            "correct_answers": correct_answers,
+            "passed": passed,
+            "attempted_at": datetime.utcnow()
+        }
+        
+        result = await db.quiz_results.insert_one(result_data)
+        logger.info(f"Quiz result saved: {result.inserted_id} for user {current_user['_id']}")
+        
+        # Return as plain JSON
+        return JSONResponse(content={
+            "id": str(result.inserted_id),
+            "user_id": result_data["user_id"],
+            "quiz_id": result_data["quiz_id"],
+            "score": result_data["score"],
+            "total_questions": result_data["total_questions"],
+            "correct_answers": result_data["correct_answers"],
+            "passed": result_data["passed"],
+            "attempted_at": result_data["attempted_at"].isoformat()
+        })
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error submitting quiz: {e}", exc_info=True)
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid quiz ID"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to submit quiz"
         )
-    
-    quiz = await db.quizzes.find_one({"_id": ObjectId(quiz_id)})
-    if not quiz:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Quiz not found"
-        )
-    
-    # Get questions with correct answers
-    questions = await db.quiz_questions.find({"quiz_id": quiz_id}).to_list(length=100)
-    
-    if len(attempt.answers) != len(questions):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Number of answers doesn't match number of questions"
-        )
-    
-    # Calculate score
-    correct_answers = 0
-    for i, question in enumerate(questions):
-        user_answer_index = attempt.answers[i]
-        if 0 <= user_answer_index < len(question["options"]):
-            if question["options"][user_answer_index]["is_correct"]:
-                correct_answers += 1
-    
-    total_questions = len(questions)
-    score = (correct_answers / total_questions) * 100
-    passed = score >= quiz["passing_score"]
-    
-    # Save result
-    result_data = {
-        "user_id": str(current_user["_id"]),
-        "quiz_id": quiz_id,
-        "score": score,
-        "total_questions": total_questions,
-        "correct_answers": correct_answers,
-        "passed": passed,
-        "attempted_at": datetime.utcnow()
-    }
-    
-    result = await db.quiz_results.insert_one(result_data)
-    
-    return QuizResultResponse(
-        id=str(result.inserted_id),
-        **result_data
-    )
 
 @app.get("/api/quizzes/results")
 async def get_quiz_results(
     current_user = Depends(get_current_user),
     db = Depends(get_database)
 ):
-    """Get user's quiz results"""
-    try:
-        # Find all results for the user without sorting first
-        results = await db.quiz_results.find(
-            {"user_id": str(current_user["_id"])}
-        ).to_list(length=100)
+    """Get user's recent quiz results"""
+    user_id = str(current_user["_id"])
+    
+    # Get recent quiz results (same as dashboard)
+    results = await db.quiz_results.find(
+        {"user_id": user_id}
+    ).sort("attempted_at", -1).limit(20).to_list(length=20)
+    
+    # Convert to response format with ISO datetime strings
+    response_list = []
+    for r in results:
+        attempted_at = r.get("attempted_at")
+        if isinstance(attempted_at, datetime):
+            attempted_at_str = attempted_at.isoformat()
+        else:
+            attempted_at_str = datetime.utcnow().isoformat()
         
-        response_list = []
-        for r in results:
-            try:
-                # Ensure attempted_at is present, use current time if missing
-                if "attempted_at" not in r:
-                    r["attempted_at"] = datetime.utcnow()
-                
-                # Build response object
-                result_obj = {
-                    "id": str(r["_id"]),
-                    "user_id": str(r.get("user_id", "")),
-                    "quiz_id": str(r.get("quiz_id", "")),
-                    "score": float(r.get("score", 0)),
-                    "total_questions": int(r.get("total_questions", 0)),
-                    "correct_answers": int(r.get("correct_answers", 0)),
-                    "passed": bool(r.get("passed", False)),
-                    "attempted_at": r["attempted_at"].isoformat() if isinstance(r["attempted_at"], datetime) else str(r["attempted_at"])
-                }
-                
-                response_list.append(result_obj)
-            except Exception as e:
-                logger.error(f"Error processing quiz result {r.get('_id')}: {e}")
-                continue
-        
-        # Sort by attempted_at after processing
-        response_list.sort(key=lambda x: x["attempted_at"], reverse=True)
-        
-        return response_list
-    except Exception as e:
-        logger.error(f"Error fetching quiz results: {e}")
-        # Return empty list instead of error
-        return []
-    return response_list
+        response_list.append({
+            "id": str(r["_id"]),
+            "user_id": str(r.get("user_id", "")),
+            "quiz_id": str(r.get("quiz_id", "")),
+            "score": float(r.get("score", 0)),
+            "total_questions": int(r.get("total_questions", 0)),
+            "correct_answers": int(r.get("correct_answers", 0)),
+            "passed": bool(r.get("passed", False)),
+            "attempted_at": attempted_at_str
+        })
+    
+    return JSONResponse(content=response_list)
 
 # ==================== DASHBOARD ROUTES ====================
 
@@ -600,6 +606,8 @@ async def get_dashboard(
                 "quiz_id": result["quiz_id"],
                 "quiz_title": quiz["title"],
                 "score": result["score"],
+                "correct_answers": result.get("correct_answers", 0),
+                "total_questions": result.get("total_questions", 0),
                 "passed": result["passed"],
                 "attempted_at": result["attempted_at"]
             })

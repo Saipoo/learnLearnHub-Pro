@@ -5,8 +5,7 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import Layout from '../components/Layout';
-import { authAPI, profileAPI, quizAPI } from '../lib/api';
-import { QuizResult } from '../lib/types';
+import { authAPI, profileAPI, dashboardAPI } from '../lib/api';
 import { formatDate } from '../lib/utils';
 import styles from '../styles/Quizzes.module.css';
 import { FiAward, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
@@ -15,7 +14,7 @@ export default function Quizzes() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
-  const [results, setResults] = useState<QuizResult[]>([]);
+  const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,15 +29,15 @@ export default function Quizzes() {
 
   const fetchData = async () => {
     try {
-      const [userRes, profileRes, resultsRes] = await Promise.all([
+      const [userRes, profileRes, dashboardRes] = await Promise.all([
         authAPI.getMe(),
         profileAPI.get(),
-        quizAPI.getResults(),
+        dashboardAPI.getStats(),
       ]);
 
       setUser(userRes.data);
       setProfile(profileRes.data);
-      setResults(resultsRes.data);
+      setResults(dashboardRes.data.recent_quiz_results || []);
     } catch (error) {
       toast.error('Failed to load quiz results');
     } finally {
@@ -67,11 +66,11 @@ export default function Quizzes() {
 
           {results.length > 0 ? (
             <div className={styles.results}>
-              {results.map((result) => (
-                <div key={result.id} className={styles.resultCard}>
+              {results.map((result: any, index: number) => (
+                <div key={index} className={styles.resultCard}>
                   <div className={styles.resultHeader}>
                     <div>
-                      <h3>Quiz Result</h3>
+                      <h3>{result.quiz_title || 'Quiz Result'}</h3>
                       <div className={styles.date}>
                         <FiClock size={14} />
                         {formatDate(result.attempted_at)}
