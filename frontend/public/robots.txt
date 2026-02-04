@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /complete-profile
+Disallow: /quizzes
+
+# Sitemap
+Sitemap: https://learnhub-pro-academy.vercel.app/sitemap.xml
